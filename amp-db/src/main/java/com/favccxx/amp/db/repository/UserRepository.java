@@ -3,10 +3,10 @@ package com.favccxx.amp.db.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.favccxx.amp.db.model.AmpUser;
+import com.favccxx.amp.db.model.SysUser;
 
 @Repository
-public interface UserRepository extends JpaRepository<AmpUser, Long> {
+public interface UserRepository extends JpaRepository<SysUser, Long> {
 
-	AmpUser findByUsername(String username);
+	SysUser findByUsername(String username);
 }

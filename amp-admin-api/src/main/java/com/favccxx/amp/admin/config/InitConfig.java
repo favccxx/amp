@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.favccxx.amp.admin.constants.SysConstants;
 import com.favccxx.amp.db.model.AmpShop;
-import com.favccxx.amp.db.model.AmpUser;
+import com.favccxx.amp.db.model.SysUser;
 import com.favccxx.amp.db.repository.ShopRepository;
 import com.favccxx.amp.db.repository.UserRepository;
 
@@ -48,7 +48,7 @@ public class InitConfig implements ApplicationRunner {
 	}
 	
 	private void initUserInfo() {
-		AmpUser user = new AmpUser();
+		SysUser user = new SysUser();
 		user.setUsername("admin");
 		user.setPassword("admin");
 		user.setNickName("管理员");

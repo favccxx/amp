@@ -14,7 +14,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.favccxx.amp.db.model.AuditLog;
 import com.favccxx.amp.db.repository.AuditLogRepository;
-import com.favccxx.amp.util.LogUtil;
+import com.favccxx.amp.util.log.LogUtil;
 
 public class AuditLogInterceptor implements HandlerInterceptor {
 

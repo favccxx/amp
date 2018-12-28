@@ -12,7 +12,7 @@ import com.favccxx.amp.admin.service.ShopService;
 import com.favccxx.amp.admin.service.UserService;
 import com.favccxx.amp.db.dto.RestResult;
 import com.favccxx.amp.db.model.AmpShop;
-import com.favccxx.amp.db.model.AmpUser;
+import com.favccxx.amp.db.model.SysUser;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,7 +34,7 @@ public class ShopController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "操作成功", response = AmpShop.class) })
 	@ApiOperation(httpMethod = "GET", value = "根据店铺代码查询店铺信息")
 	public RestResult listByUsername(@PathVariable(value = "username") String username) {
-		AmpUser user = userService.findByUsername(username);
+		SysUser user = userService.findByUsername(username);
 		if(user == null) {
 			return RestResult.error("用户不存在！");
 		}
