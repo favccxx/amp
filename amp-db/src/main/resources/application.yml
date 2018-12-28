@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: db
+  message:
+    encoding: UTF-8
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: UTC
+logging:
+  level:
+    root: ERROR
+    org.springframework: trace
+    org.hibernate.type: trace
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
