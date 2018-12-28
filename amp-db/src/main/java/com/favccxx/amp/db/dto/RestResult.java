@@ -30,7 +30,7 @@ public class RestResult implements Serializable {
 	/**
 	 * 消息
 	 */
-	private String message;
+	private String message = "SUCCESS";
 
 
 	public int getStatus() {
@@ -89,10 +89,10 @@ public class RestResult implements Serializable {
 	}
 	
 	public static RestResult error() {
-		return new RestResult(RestState.ERROR.getState());
+		return new RestResult(RestState.ERROR.getState(), "", "error");
 	}
 	
 	public static RestResult error(String error) {
-		return new RestResult(RestState.ERROR.getState(), null, error);
+		return new RestResult(RestState.ERROR.getState(), "", error);
 	}
 }

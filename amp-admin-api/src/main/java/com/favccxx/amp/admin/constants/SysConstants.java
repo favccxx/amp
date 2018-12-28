@@ -2,7 +2,7 @@ package com.favccxx.amp.admin.constants;
 
 public interface SysConstants {
 
-	public static final String DEFAULT_CLUB = "SMARTCLUB";
+	public static final String DEFAULT_SHOP = "SMARTCLUB";
 
 	// 前端发送给后台的令牌参数
 	public static final String HEADER_TOKEN_KEY = "X-Token";

@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 
 @Entity
 @Component
-public class SmartShop implements Serializable {
+public class AmpShop implements Serializable {
 
 	/**
 	 * 
