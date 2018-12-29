@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * 通用接口
+ * 
  * @author favccxx
  *
  * @param <T>
@@ -13,6 +14,8 @@ public interface BaseService<T> {
 	T findOne(long id);
 
 	T save(T entity);
+
+	void deleteById(long id);
 
 	void delete(T entity);
 

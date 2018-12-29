@@ -3,7 +3,13 @@ package com.favccxx.amp.admin.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.favccxx.amp.admin.service.ShopService;
@@ -36,6 +42,24 @@ public class ShopServiceImpl extends BaseServiceImpl<ShopRepository, AmpShop> im
 	@Override
 	public AmpShop findByShopCode(String shopCode) {
 		return repository.findByShopCode(shopCode);
+	}
+
+	@Override
+	public Page<AmpShop> pageQuery(AmpShop shop, Pageable pageable) {
+		ExampleMatcher matcher = ExampleMatcher.matching()
+				.withMatcher("shopCode", GenericPropertyMatchers.exact())
+				.withMatcher("shopName", GenericPropertyMatchers.startsWith())
+				.withIgnorePaths("id");
+		
+		if(StringUtils.isBlank(shop.getStatus())) {
+			matcher.getIgnoredPaths().add("status");
+		}else {
+			matcher.withMatcher("status", GenericPropertyMatchers.exact());
+		}
+
+		Example<AmpShop> example = Example.of(shop, matcher);
+
+		return repository.findAll(example, pageable);
 	}
 
 }

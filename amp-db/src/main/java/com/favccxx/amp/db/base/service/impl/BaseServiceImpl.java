@@ -23,6 +23,11 @@ public class BaseServiceImpl<E extends JpaRepository<T, Long>, T> implements Bas
 	}
 
 	@Override
+	public void deleteById(long id) {
+		repository.deleteById(id);
+	}
+
+	@Override
 	public void delete(T entity) {
 		repository.delete(entity);
 	}

@@ -2,6 +2,9 @@ package com.favccxx.amp.admin.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.favccxx.amp.db.base.service.BaseService;
 import com.favccxx.amp.db.model.AmpShop;
 
@@ -20,5 +23,14 @@ public interface ShopService extends BaseService<AmpShop> {
 	 * @return
 	 */
 	AmpShop findByShopCode(String shopCode);
+	
+	
+	/**
+	 * 分页查询店铺信息
+	 * @param shop
+	 * @param pageable
+	 * @return
+	 */
+	Page<AmpShop> pageQuery(AmpShop shop, Pageable pageable);
 	
 }
