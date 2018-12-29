@@ -7,6 +7,8 @@ export default {
     shopManagement: '店铺管理',
     categoryManagement: '商品类目',
     sysTemplate: '默认模板',
+    myshop: '我的店铺',
+    templateManagement: '模板管理',
     saleProduct: '在售产品',
     buyProduct: '购买产品',
     confirmOrder: '确认订单',
@@ -100,6 +102,16 @@ export default {
     any: '随便填',
     thirdparty: '第三方登录',
     thirdpartyTips: '本地不能模拟，请结合自己业务进行模拟！！！'
+  },
+  shop: {
+    shopCode: '店铺代码',
+    shopName: '店铺名称',
+    shopType: '店铺类型',
+    status: '状态',
+    description: '备注',
+    charger: '负责人',
+    chargeTel: '负责人电话',
+    createTime: '创建时间'
   },
   documentation: {
     documentation: '文档',

@@ -68,7 +68,9 @@ export const constantRouterMap = [
         meta: { title: 'dashboard', icon: 'dashboard', noCache: true }
       }
     ]
-  },
+  }
+  /*
+  ,
   {
     path: '/sale',
     component: Layout,
@@ -115,7 +117,7 @@ export const constantRouterMap = [
         meta: { title: 'myOrder', icon: 'tree', noCache: true }
       }
     ]
-  }
+  }*/
 ]
 
 export default new Router({
@@ -138,7 +140,7 @@ export const asyncRouterMap = [
     children: [
       {
         path: 'shop',
-        component: () => import('@/views/staff/index'),
+        component: () => import('@/views/shop/index'),
         name: 'ShopManagement',
         meta: {
           title: 'shopManagement',
@@ -148,7 +150,7 @@ export const asyncRouterMap = [
       },
       {
         path: 'category',
-        component: () => import('@/views/role/index'),
+        component: () => import('@/views/category/index'),
         name: 'CategoryManagement',
         meta: {
           title: 'categoryManagement',
@@ -163,6 +165,56 @@ export const asyncRouterMap = [
           title: 'sysTemplate',
           icon: 'theme'
         }
+      }
+    ]
+  },
+  {
+    path: '/myshop',
+    component: Layout,
+    redirect: '/myshop/index',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: 'myshop',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: 'myshop',
+        component: () => import('@/views/myshop/index'),
+        name: 'Myshop',
+        meta: {
+          title: 'myshop',
+          icon: 'user',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'create',
+        component: () => import('@/views/product/create'),
+        name: 'CreateProduct',
+        meta: {
+          title: 'createProduct',
+          icon: 'edit' }
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/product/edit'),
+        name: 'EditProduct',
+        meta: { title: 'editProduct', noCache: true },
+        hidden: true
+      },
+      {
+        path: 'index',
+        component: () => import('@/views/product/index'),
+        name: 'Product',
+        meta: { title: 'productList', icon: 'guide', noCache: true }
+      },
+      {
+        path: 'template',
+        component: () => import('@/views/template/index'),
+        name: 'Template',
+        meta: { title: 'templateManagement', icon: 'guide', noCache: true }
       }
     ]
   },

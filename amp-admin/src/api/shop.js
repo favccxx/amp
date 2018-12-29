@@ -7,3 +7,11 @@ export function fetchShopDetail(query) {
     params: query
   })
 }
+
+export function fetchShopList(query) {
+  return request({
+    url: '/shop/list',
+    method: 'get',
+    params: query
+  })
+}
