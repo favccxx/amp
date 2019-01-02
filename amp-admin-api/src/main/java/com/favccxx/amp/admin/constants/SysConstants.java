@@ -9,10 +9,6 @@ public interface SysConstants {
 
 	public static final String PAGE_SIZE = "10"; // 默认分页每页显示的数目
 
-	public enum OrderStatus implements SysConstants {
-		CREATED, CANCELD, FINISHED, DELETED
-	}
-
 	public static final int CATEGORY_CREATED = 200;
 	public static final int CATEGORY_FROZEN = 201;
 	public static final int CATEGORY_DELETED = 202;

@@ -28,6 +28,11 @@ public class CategoryPutReq {
 	private long parentId;
 
 	/**
+	 * 层级
+	 */
+	private String level;
+
+	/**
 	 * 类别详情
 	 */
 	private String detail;
@@ -70,6 +75,14 @@ public class CategoryPutReq {
 
 	public void setDetail(String detail) {
 		this.detail = detail;
+	}
+
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
 	}
 
 }

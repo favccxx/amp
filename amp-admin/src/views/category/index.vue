@@ -32,6 +32,16 @@
           <span>{{ scope.row.categoryName }}</span>
         </template>
       </el-table-column>
+      <el-table-column :label="$t('category.level')" min-width="20%" align="center">
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.level === 'L1' ? 'primary' : 'info' ">{{ scope.row.level === 'L1' ? '一级类目' : '二级类目' }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('category.parent')" min-width="20%" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.parentId }}</span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('category.status')" min-width="15%" align="center">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status | statusShowFilter }}</el-tag>
@@ -67,6 +77,17 @@
         <el-form-item :label="$t('category.categoryName')" prop="categoryName">
           <el-input v-model="temp.categoryName"/>
         </el-form-item>
+        <el-form-item :label="$t('category.level')">
+          <el-select v-model="temp.level" @change="onLevelChange">
+            <el-option label="一级类目" value="L1"/>
+            <el-option label="二级类目" value="L2"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item v-if="temp.level === 'L2'" label="父类别" prop="parentId">
+          <el-select v-model="temp.parentId" class="filter-item">
+            <el-option v-for="item in parentCategoryies" :key="item.id" :label="item.categoryName" :value="item.id"/>
+          </el-select>
+        </el-form-item>
         <el-form-item :label="$t('table.status')">
           <el-select v-model="temp.status" class="filter-item" placeholder="请选择">
             <el-option v-for="item in statusOptions" :key="item.value" :label="item.name" :value="item.value"/>
@@ -97,7 +118,7 @@
 </template>
 
 <script>
-import { fetchCategoryList, fetchCategoryDetail, createCategory, modifyStatus, updateCategory } from '@/api/category'
+import { fetchCategoryList, fetchParentCategoryList, fetchCategoryDetail, createCategory, modifyStatus, updateCategory } from '@/api/category'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 
@@ -143,6 +164,8 @@ export default {
   data() {
     return {
       tableKey: 0,
+      parentId: undefined,
+      parentCategoryies: [],
       list: null,
       total: null,
       listLoading: true,
@@ -177,6 +200,7 @@ export default {
         id: undefined,
         categoryCode: '',
         categoryName: '',
+        level: 'L2',
         status: 200,
         detail: ''
 
@@ -199,6 +223,7 @@ export default {
   },
   created() {
     this.getList()
+    this.getParentCategoryList()
   },
   methods: {
     getList() {
@@ -212,6 +237,20 @@ export default {
         }
 
         // Just to simulate the time of the request
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1.5 * 1000)
+      })
+    },
+    getParentCategoryList() {
+      this.listLoading = true
+      fetchParentCategoryList(this.listQuery).then(response => {
+        var respData = response.data
+        if (respData.status === 200) {
+          this.parentCategoryies = respData.data
+          this.listLoading = false
+        }
+
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
@@ -253,6 +292,11 @@ export default {
         categoryName: '',
         status: 200,
         detail: ''
+      }
+    },
+    onLevelChange: function(value) {
+      if (value === 'L1') {
+        this.pid = undefined
       }
     },
     handleCreate() {

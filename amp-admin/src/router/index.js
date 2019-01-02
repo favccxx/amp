@@ -174,7 +174,7 @@ export const asyncRouterMap = [
     redirect: '/myshop/index',
     alwaysShow: true, // will always show the root menu
     meta: {
-      title: 'myshop',
+      title: 'shopManagement',
       icon: 'lock',
       roles: ['admin', 'editor'] // you can set roles in root nav
     },
@@ -188,7 +188,20 @@ export const asyncRouterMap = [
           icon: 'user',
           roles: ['admin'] // or you can only set roles in sub nav
         }
-      },
+      }
+    ]
+  },
+  {
+    path: '/product',
+    component: Layout,
+    redirect: '/product/index',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: 'productManagement',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
       {
         path: 'create',
         component: () => import('@/views/product/create'),
@@ -219,57 +232,6 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/catalog',
-    component: Layout,
-    redirect: '/catalog/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/catalog/index'),
-        name: 'Catalog',
-        meta: {
-          roles: ['root'],
-          title: 'catalogManagement',
-          icon: 'component',
-          noCache: true }
-      }
-    ]
-  },
-  {
-    path: '/product',
-    component: Layout,
-    redirect: '/product/index',
-    name: 'Product',
-    meta: {
-      roles: ['root', 'admin'],
-      title: 'productManagement',
-      icon: 'example'
-    },
-    children: [
-      {
-        path: 'create',
-        component: () => import('@/views/product/create'),
-        name: 'CreateProduct',
-        meta: {
-          title: 'createProduct',
-          icon: 'edit' }
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/product/edit'),
-        name: 'EditProduct',
-        meta: { title: 'editProduct', noCache: true },
-        hidden: true
-      },
-      {
-        path: 'index',
-        component: () => import('@/views/product/index'),
-        name: 'Product',
-        meta: { title: 'productList', icon: 'guide', noCache: true }
-      }
-    ]
-  },
-  {
     path: '/order',
     component: Layout,
     redirect: '/order/index',
@@ -287,15 +249,27 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/vip',
+    path: '/faqcomment',
     component: Layout,
-    redirect: '/vip/index',
+    redirect: '/faq/index',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      title: 'faqComment',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/vip/index'),
-        name: 'vip',
-        meta: { roles: ['root', 'admin'], title: 'vipManagement', icon: 'people', noCache: true }
+        path: 'faq',
+        component: () => import('@/views/faqcomment/faq'),
+        name: 'FAQ',
+        meta: { title: 'faqManagement', icon: 'guide', noCache: true }
+      },
+      {
+        path: 'review',
+        component: () => import('@/views/faqcomment/review'),
+        name: 'REVIEW',
+        meta: { title: 'reviewManagement', icon: 'guide', noCache: true }
       }
     ]
   },

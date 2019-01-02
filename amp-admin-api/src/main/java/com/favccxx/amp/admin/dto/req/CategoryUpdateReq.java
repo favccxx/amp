@@ -13,6 +13,14 @@ public class CategoryUpdateReq {
 	 * 类别名称
 	 */
 	private String categoryName;
+	
+	
+	private long parentId;
+
+	/**
+	 * 层级
+	 */
+	private String level;
 
 	/**
 	 * 类别状态
@@ -67,6 +75,22 @@ public class CategoryUpdateReq {
 
 	public void setUpdateUserName(String updateUserName) {
 		this.updateUserName = updateUserName;
+	}
+
+	public long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(long parentId) {
+		this.parentId = parentId;
+	}
+
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
 	}
 	
 	

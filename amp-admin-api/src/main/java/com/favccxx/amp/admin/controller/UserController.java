@@ -33,7 +33,7 @@ import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/user")
-@Api(tags="1. 用户管理接口" )
+@Api(tags="1.1 用户管理接口" )
 public class UserController {
 
 	@Autowired

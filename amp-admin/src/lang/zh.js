@@ -20,6 +20,9 @@ export default {
     catalogManagement: '类别管理',
     productList: '产品列表',
     orderManagement: '订单管理',
+    faqComment: '问答和评价',
+    faqManagement: '问答管理',
+    reviewManagement: '评价管理',
     vipManagement: '会员管理',
     staffManagement: '员工管理',
     systemManagement: '系统管理',
@@ -147,6 +150,8 @@ export default {
   category: {
     categoryCode: '类别代码',
     categoryName: '类别名称',
+    level: '级别',
+    parent: '父类名称',
     status: '状态',
     categoryOrder: '显示顺序',
     detail: '备注',

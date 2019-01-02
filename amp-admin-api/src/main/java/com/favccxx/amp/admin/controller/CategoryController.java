@@ -37,7 +37,7 @@ import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/category")
-@Api(tags = "2 产品类别管理接口")
+@Api(tags = "2.1 产品类别管理接口")
 public class CategoryController {
 
 	@Autowired
@@ -104,11 +104,11 @@ public class CategoryController {
 		AmpCategory category = new AmpCategory();
 
 		if (StringUtils.isBlank(categoryReq.getCategoryCode()) || StringUtils.isBlank(categoryReq.getCategoryName())) {
-			return RestResult.error("categoryCode/categoryName/detail不允许为空");
+			return RestResult.error("categoryCode/categoryName不允许为空");
 		}
 
 		try {
-			BeanUtils.copyProperties(categoryReq, category);
+			BeanUtils.copyProperties(category, categoryReq);
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -150,6 +150,8 @@ public class CategoryController {
 		if (StringUtils.isNoneBlank(categoryReq.getDetail())) {
 			existCategory.setDetail(categoryReq.getDetail());
 		}
+		
+		existCategory.setLevel(categoryReq.getLevel());
 
 		for (CategoryStatus catStatus : CategoryStatus.values()) {
 			if (catStatus.value() == categoryReq.getStatus()) {

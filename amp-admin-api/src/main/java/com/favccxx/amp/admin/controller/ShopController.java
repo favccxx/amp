@@ -29,7 +29,7 @@ import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/shop")
-@Api(tags="1. 店铺管理接口" )
+@Api(tags="2.0. 店铺管理接口" )
 public class ShopController {
 
 	@Autowired
