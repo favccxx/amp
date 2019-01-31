@@ -50,7 +50,7 @@ public class ProductController {
 	@Autowired
 	ProductService productService;
 	
-	@GetMapping("/list")
+	@GetMapping("/list") 
 	@ApiResponses(value = {
             @ApiResponse(code = 200, message = "操作成功", response = AmpProduct.class) })
     @ApiOperation(httpMethod = "GET", value = "分页查询产品信息")
