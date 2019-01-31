@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -49,6 +50,12 @@ public class AmpCategory implements Serializable {
 	 * 父类别Id
 	 */
 	private long parentId;
+	
+	/**
+	 * 父类名称
+	 */
+	@Transient
+	private String parentName = "";
 
 	/**
 	 * 层级
@@ -133,6 +140,14 @@ public class AmpCategory implements Serializable {
 
 	public void setParentId(long parentId) {
 		this.parentId = parentId;
+	}
+
+	public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
 	}
 
 	public String getLevel() {

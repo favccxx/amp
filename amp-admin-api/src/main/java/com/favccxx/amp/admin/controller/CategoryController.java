@@ -25,6 +25,7 @@ import com.favccxx.amp.admin.constants.CategoryStatus;
 import com.favccxx.amp.admin.constants.SysConstants;
 import com.favccxx.amp.admin.dto.req.CategoryPutReq;
 import com.favccxx.amp.admin.dto.req.CategoryUpdateReq;
+import com.favccxx.amp.admin.dto.resp.CategoryDto;
 import com.favccxx.amp.admin.service.CategoryService;
 import com.favccxx.amp.admin.util.SortUtil;
 import com.favccxx.amp.db.dto.RestResult;
@@ -77,6 +78,18 @@ public class CategoryController {
 		Sort mySort = SortUtil.getSort(sort);
 		Pageable pageable = PageRequest.of(page - 1, limit, mySort);
 		pageData = categoryService.pageQuery(category, pageable);
+		
+		List<AmpCategory> categoryList = pageData.getContent();
+		for(AmpCategory cate : categoryList) {
+			if(cate.getParentId() != 0) {
+				AmpCategory parentCategory = categoryService.findOne(cate.getParentId());
+				if(parentCategory != null) {
+					cate.setParentName(parentCategory.getCategoryName());
+				}
+			}
+		}
+		
+//		pageData.getContent().
 
 		return RestResult.ok(pageData);
 	}
@@ -94,6 +107,14 @@ public class CategoryController {
 	@ApiOperation(httpMethod = "GET", value = "查询所有正常的类别信息")
 	public RestResult listNomal() {
 		List<AmpCategory> list = categoryService.listNormal();
+		return RestResult.ok(list);
+	}
+	
+	@GetMapping("/listByLevel")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "操作成功", response = CategoryDto.class) })
+	@ApiOperation(httpMethod = "GET", value = "按层级查询类别信息")
+	public RestResult listByLevel() {
+		List<CategoryDto> list = categoryService.listByLevel();		
 		return RestResult.ok(list);
 	}
 

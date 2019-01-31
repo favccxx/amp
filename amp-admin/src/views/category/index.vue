@@ -39,7 +39,7 @@
       </el-table-column>
       <el-table-column :label="$t('category.parent')" min-width="20%" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.parentId }}</span>
+          <span>{{ scope.row.parentName }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('category.status')" min-width="15%" align="center">

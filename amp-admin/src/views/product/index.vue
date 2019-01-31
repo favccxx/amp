@@ -22,7 +22,7 @@
     <el-table
       v-loading="listLoading"
       :key="tableKey"
-      :data="list"
+      :data="productList"
       border
       fit
       highlight-current-row
@@ -139,7 +139,7 @@ export default {
     return {
       tableKey: 0,
       categoryList: [],
-      list: null,
+      productList: null,
       total: null,
       listLoading: true,
       listQuery: {
@@ -214,8 +214,8 @@ export default {
       this.listLoading = true
       fetchProductList(this.listQuery).then(response => {
         var responseData = response.data
-        if (responseData.code === 200) {
-          this.list = responseData.data.content
+        if (responseData.status === 200) {
+          this.productList = responseData.data.content
           this.total = responseData.data.totalElements
           this.listLoading = false
         }

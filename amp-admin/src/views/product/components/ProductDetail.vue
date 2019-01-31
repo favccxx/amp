@@ -14,16 +14,13 @@
       <div class="createPost-main-container">
         <el-row>
 
-          <Warning />
-
           <el-col :span="24">
 
             <div class="postInfo-container">
               <input v-model="postForm.id" type="hidden">
-              <el-form-item style="margin-bottom: 40px;" label-width="85px" label="产品类别:">
-                <el-select v-model="postForm.categoryId" clearable class="filter-item">
-                  <el-option v-for="item in categoryList" :key="item.id" :label="item.categoryName" :value="item.id"/>
-                </el-select>
+
+              <el-form-item style="margin-bottom: 40px;" label-width="85px" label="所属分类">
+                <el-cascader :options="categoryList" expand-trigger="hover" :props="props" v-model="selectedCategory" @change="handleCategoryChange"/>
               </el-form-item>
 
               <el-form-item style="margin-bottom: 40px;" label-width="85px" label="产品名称:">
@@ -86,19 +83,21 @@
 </template>
 
 <script>
+import user from '@/store/modules/user'
 import Tinymce from '@/components/Tinymce'
 import Upload from '@/components/Upload/productImage'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { validateURL } from '@/utils/validate'
 import { fetchProductDetail, fetchProductEmpty, updateProduct } from '@/api/product'
-import { fetchNormalCategoryList } from '@/api/category'
+import { listByLevel } from '@/api/category'
 import { userSearch } from '@/api/remoteSearch'
 import Warning from './Warning'
 import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown'
 
 const defaultForm = {
   status: 'draft',
+  shopCode: user.state.shopCode,
   categoryId: undefined, // 产品类别
   productName: '', // 产品名称
   originalPrice: '', // 出厂价格
@@ -155,7 +154,6 @@ export default {
       id: undefined,
       postForm: Object.assign({}, defaultForm),
       loading: false,
-      categoryList: [],
       userListOptions: [],
       setMoneyPrefix: '¥ ',
       rules: {
@@ -163,6 +161,12 @@ export default {
         productName: [{ validator: validateRequire }],
         detail: [{ validator: validateRequire }],
         source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
+      },
+      categoryList: [],
+      selectedCategory: [],
+      props: {
+        label: 'categoryName',
+        value: 'id'
       }
     }
   },
@@ -184,11 +188,15 @@ export default {
   },
   methods: {
     getCategoryList() {
-      fetchNormalCategoryList().then(response => {
+      listByLevel().then(response => {
         this.categoryList = response.data.data
+        console.log('categorylist', this.categoryList)
       }).catch(err => {
         console.log(err)
       })
+    },
+    handleCategoryChange(value) {
+      this.postForm.categoryId = value[value.length - 1]
     },
     fetchEmpty() {
       fetchProductEmpty().then(response => {

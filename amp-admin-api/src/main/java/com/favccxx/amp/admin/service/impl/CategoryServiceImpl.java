@@ -1,5 +1,6 @@
 package com.favccxx.amp.admin.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Example;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.favccxx.amp.admin.constants.CategoryStatus;
+import com.favccxx.amp.admin.dto.resp.CategoryDto;
 import com.favccxx.amp.admin.service.CategoryService;
 import com.favccxx.amp.db.base.service.impl.BaseServiceImpl;
 import com.favccxx.amp.db.model.AmpCategory;
@@ -44,6 +46,35 @@ public class CategoryServiceImpl extends BaseServiceImpl<CategoryRepository, Amp
 	@Override
 	public List<AmpCategory> listParent() {
 		return repository.findByParentIdAndStatus(0, CategoryStatus.ENABLE.value());
+	}
+
+	@Override
+	public List<CategoryDto> listByLevel() {
+		List<CategoryDto> list = new ArrayList<CategoryDto>();
+		
+		List<AmpCategory> categoryList = listParent();
+		for(AmpCategory category : categoryList) {
+			CategoryDto cate = new CategoryDto();
+			cate.setId(category.getId());
+			cate.setCategoryName(category.getCategoryName());
+			cate.setCategoryCode(category.getCategoryCode());
+			
+			List<AmpCategory> children = repository.findByParentIdAndStatus(category.getId(), CategoryStatus.ENABLE.value());			
+			List<CategoryDto> childrenCategory = new ArrayList<CategoryDto>();
+			
+			for(AmpCategory c : children) {
+				CategoryDto cd = new CategoryDto();
+				cd.setId(c.getId());
+				cd.setCategoryName(c.getCategoryName());
+				cd.setCategoryCode(c.getCategoryCode());
+				childrenCategory.add(cd);
+			}
+			
+			cate.setChildren(childrenCategory);
+			
+			list.add(cate);
+		}
+		return list;
 	}
 
 }

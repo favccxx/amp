@@ -19,6 +19,11 @@ public class ProductReq {
 	private long clubId;
 	
 	/**
+	 * 店铺代码
+	 */
+	private String shopCode;
+	
+	/**
 	 * 产品名称
 	 */
 	private String productName;
@@ -118,6 +123,14 @@ public class ProductReq {
 	}
 
 	
+
+	public String getShopCode() {
+		return shopCode;
+	}
+
+	public void setShopCode(String shopCode) {
+		this.shopCode = shopCode;
+	}
 
 	public String getStatus() {
 		return status;

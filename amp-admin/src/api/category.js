@@ -8,6 +8,14 @@ export function fetchCategoryList(query) {
   })
 }
 
+export function listByLevel(query) {
+  return request({
+    url: '/category/listByLevel',
+    method: 'get',
+    params: query
+  })
+}
+
 export function fetchParentCategoryList(query) {
   return request({
     url: '/category/listParent',

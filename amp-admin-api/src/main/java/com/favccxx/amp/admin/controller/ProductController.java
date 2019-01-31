@@ -26,9 +26,11 @@ import com.favccxx.amp.admin.constants.ProductStatus;
 import com.favccxx.amp.admin.constants.SysConstants;
 import com.favccxx.amp.admin.dto.req.ProductReq;
 import com.favccxx.amp.admin.service.ProductService;
+import com.favccxx.amp.admin.service.ShopService;
 import com.favccxx.amp.admin.util.SortUtil;
 import com.favccxx.amp.db.dto.RestResult;
 import com.favccxx.amp.db.model.AmpProduct;
+import com.favccxx.amp.db.model.AmpShop;
 import com.favccxx.amp.util.date.DateUtil;
 
 import io.swagger.annotations.Api;
@@ -43,6 +45,8 @@ public class ProductController {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
+	@Autowired
+	ShopService shopService;
 	@Autowired
 	ProductService productService;
 	
@@ -225,12 +229,19 @@ public class ProductController {
 					product.setStar(productReq.getStar());
 				}
 				
+				
+				
 				product.setStatus(ProductStatus.CREATED.value());
 				if("published".equals(productReq.getStatus())) {
 					product.setStatus(ProductStatus.PUBLISHED.value());
 				}else if("draft".equals(productReq.getStatus())){
 					product.setStatus(ProductStatus.DRAFT.value());
 				}
+				
+				//更新店铺信息
+				String shopCode = productReq.getShopCode();
+				AmpShop shop = shopService.findByShopCode(shopCode);
+				product.setShopId(shop.getId());
 				
 				product.setCreateTime(new Date());
 				product.setUpdateTime(new Date());
