@@ -32,6 +32,11 @@ public class ProductReq {
 	 * 产品类型
 	 */
 	private String productType;
+	
+	/**
+	 * 产品主图
+	 */
+	private String productImg;
 
 	/**
 	 * 产品等级
@@ -98,6 +103,14 @@ public class ProductReq {
 	}
 
 	
+	public String getProductImg() {
+		return productImg;
+	}
+
+	public void setProductImg(String productImg) {
+		this.productImg = productImg;
+	}
+
 	public String getProductName() {
 		return productName;
 	}

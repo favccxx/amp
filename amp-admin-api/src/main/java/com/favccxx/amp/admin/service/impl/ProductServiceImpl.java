@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.favccxx.amp.admin.constants.ProductStatus;
 import com.favccxx.amp.admin.service.ProductService;
 import com.favccxx.amp.db.base.service.impl.BaseServiceImpl;
 import com.favccxx.amp.db.model.AmpProduct;
@@ -25,12 +26,19 @@ public class ProductServiceImpl extends BaseServiceImpl<ProductRepository, AmpPr
 		ExampleMatcher matcher = ExampleMatcher.matching()
 				.withMatcher("productNo", GenericPropertyMatchers.startsWith())
 				.withMatcher("productName", GenericPropertyMatchers.startsWith())
-				.withMatcher("status", GenericPropertyMatchers.exact()).withIgnorePaths("id")
+				.withIgnorePaths("id")
 				.withIgnorePaths("workTime").withIgnorePaths("isPackage").withIgnorePaths("originalPrice");
 		if (product.getCategoryId() == 0) {
 			matcher.getIgnoredPaths().add("categoryId");
 		} else {
 			matcher.withMatcher("categoryId", GenericPropertyMatchers.exact());
+		}
+		
+		if (product.getStatus() == 0) {
+			product.setStatus(ProductStatus.PUBLISHED.value());
+			matcher.withMatcher("status", GenericPropertyMatchers.startsWith());
+		} else {
+			matcher.withMatcher("status", GenericPropertyMatchers.exact());
 		}
 
 		if (product.getShopId() == 0) {

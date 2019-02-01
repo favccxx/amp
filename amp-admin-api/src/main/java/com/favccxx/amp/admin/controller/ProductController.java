@@ -55,14 +55,24 @@ public class ProductController {
             @ApiResponse(code = 200, message = "操作成功", response = AmpProduct.class) })
     @ApiOperation(httpMethod = "GET", value = "分页查询产品信息")
 	public RestResult list(			
+			@RequestParam(value = "shopCode", required=false) String shopCode,
 			@RequestParam(value = "productName", required=false) String productName,
 			@RequestParam(value = "categoryId", required=false) String categoryId,
-			@RequestParam(value = "status", required=false, defaultValue="200") int status,
+			@RequestParam(value = "status", required=false, defaultValue="0") int status,
 			@RequestParam(value="sort", defaultValue="+id") String sort,
 			@RequestParam(value = "page", defaultValue="1")  int page,
 			@RequestParam(value = "limit", defaultValue=SysConstants.PAGE_SIZE)  int limit) {
 		Page<AmpProduct> pageData = null;
+		long shopId = 0;
+		if(StringUtils.isNoneBlank(shopCode)) {
+			AmpShop shop = shopService.findByShopCode(shopCode);
+			if(shop != null) {
+				shopId = shop.getId();
+			}
+		}
+		
 		AmpProduct product = new AmpProduct();
+		product.setShopId(shopId);
 		product.setStatus(status);
 		
 		if(StringUtils.isNotBlank(productName)) {
@@ -123,6 +133,7 @@ public class ProductController {
     @ApiOperation(httpMethod = "PUT", value = "创建产品信息")
 	public RestResult create( 
 			@RequestParam(value="productName", required=false) String productName,	//产品名称
+			@RequestParam(value="productImg", required=false) String productImg,	//产品主图
 			@RequestParam(value="status", required=false) int status,		//产品状态
 			@RequestParam(value="originalPrice", required=false) BigDecimal originalPrice,	//原始价格
 			@RequestParam(value="salePrice", required=false) BigDecimal salePrice,	//销售价格
@@ -155,6 +166,10 @@ public class ProductController {
 		if(StringUtils.isNoneBlank(offlineDate)) {
 			Date offline = DateUtil.parseStartDate(offlineDate);
 			product.setOfflineDate(offline);
+		}
+		
+		if(StringUtils.isNotBlank(productImg)) {
+			product.setProductImg(productImg);
 		}
 		
 		if(StringUtils.isNoneBlank(detail)) {
@@ -229,7 +244,9 @@ public class ProductController {
 					product.setStar(productReq.getStar());
 				}
 				
-				
+				if(StringUtils.isNotBlank(productReq.getProductImg())) {
+					product.setProductImg(productReq.getProductImg());
+				}
 				
 				product.setStatus(ProductStatus.CREATED.value());
 				if("published".equals(productReq.getStatus())) {
@@ -241,7 +258,10 @@ public class ProductController {
 				//更新店铺信息
 				String shopCode = productReq.getShopCode();
 				AmpShop shop = shopService.findByShopCode(shopCode);
-				product.setShopId(shop.getId());
+				if(shop != null) {
+					product.setShopId(shop.getId());
+				}
+				
 				
 				product.setCreateTime(new Date());
 				product.setUpdateTime(new Date());

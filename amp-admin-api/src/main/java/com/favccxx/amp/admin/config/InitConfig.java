@@ -1,5 +1,6 @@
 package com.favccxx.amp.admin.config;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class InitConfig implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		initShopInfo();
-//		initUserInfo();
+		initImageFolder();
 	}
 
 	private void initShopInfo() {
@@ -44,6 +45,14 @@ public class InitConfig implements ApplicationRunner {
 			shop.setCreateUserName("admin");
 			shop.setUpdateTime(new Date());
 			shopRepository.save(shop);
+		}
+	}
+	
+	
+	private void initImageFolder() {
+		File file = new File(SysConstants.IMAGE_PATH);
+		if(!file.exists()) {
+			file.mkdirs();
 		}
 	}
 	
