@@ -3,6 +3,7 @@ package com.favccxx.amp.db.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -12,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.Transient;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -125,6 +127,12 @@ public class AmpProduct implements Serializable{
 	
 	private String updateUserName;
 
+	/**
+	 * 产品幻灯片
+	 */
+	@Transient
+	private List<AmpImage> sliders;
+	
 	public long getId() {
 		return id;
 	}
@@ -291,6 +299,14 @@ public class AmpProduct implements Serializable{
 
 	public void setTemplateId(long templateId) {
 		this.templateId = templateId;
+	}
+
+	public List<AmpImage> getSliders() {
+		return sliders;
+	}
+
+	public void setSliders(List<AmpImage> sliders) {
+		this.sliders = sliders;
 	}
 
 	

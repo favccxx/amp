@@ -16,6 +16,14 @@ export function listByLevel(query) {
   })
 }
 
+export function findParent(query) {
+  return request({
+    url: '/category/findParent',
+    method: 'get',
+    params: query
+  })
+}
+
 export function fetchParentCategoryList(query) {
   return request({
     url: '/category/listParent',

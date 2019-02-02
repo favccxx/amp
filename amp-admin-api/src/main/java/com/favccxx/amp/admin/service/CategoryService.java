@@ -20,6 +20,13 @@ public interface CategoryService extends BaseService<AmpCategory> {
 	Page<AmpCategory> pageQuery(AmpCategory category, Pageable pageable);
 	
 	/**
+	 * 查找某类别的父类别
+	 * @param categoryId
+	 * @return
+	 */
+	AmpCategory findParent(long categoryId);
+	
+	/**
 	 * 查询所有正常状态的类别信息
 	 * @return
 	 */

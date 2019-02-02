@@ -17,4 +17,10 @@ public interface ImageRepository extends JpaRepository<AmpImage, Long> {
 	 */
 	List<AmpImage> findByProductIdAndType(long productId, String type);
 	
+	/**
+	 * 删除某产品下的所有幻灯片
+	 * @param productId
+	 */
+	void deleteByProductId(long productId);
+	
 }

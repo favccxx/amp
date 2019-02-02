@@ -128,18 +128,18 @@ export default {
       },
       accept: (file, done) => {
         /* 七牛*/
-        const token = this.$store.getters.token;
+        const token = this.$store.getters.token
         getToken(token).then(response => {
-           file.token = response.data.data.token;
-           file.key = response.data.data.key;
-           file.url = response.data.data.url;
-           done();
+          file.token = response.data.data.token
+          file.key = response.data.data.key
+          file.url = response.data.data.url
+          done()
         })
         done()
       },
       sending: (file, xhr, formData) => {
-        formData.append('token', file.token);
-        formData.append('key', file.key);
+        formData.append('token', file.token)
+        formData.append('key', file.key)
         vm.initOnce = false
       }
     })

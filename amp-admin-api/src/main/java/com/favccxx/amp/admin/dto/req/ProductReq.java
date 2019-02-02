@@ -77,6 +77,8 @@ public class ProductReq {
 	 * 产品下线日期
 	 */
 	private String offlineDate;
+	
+	private String[] sliders;
 
 	public long getId() {
 		return id;
@@ -199,6 +201,14 @@ public class ProductReq {
 
 	public void setOfflineDate(String offlineDate) {
 		this.offlineDate = offlineDate;
+	}
+
+	public String[] getSliders() {
+		return sliders;
+	}
+
+	public void setSliders(String[] sliders) {
+		this.sliders = sliders;
 	}
 
 	

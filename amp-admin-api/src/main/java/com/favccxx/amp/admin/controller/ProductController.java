@@ -1,7 +1,9 @@
 package com.favccxx.amp.admin.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,10 +27,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.favccxx.amp.admin.constants.ProductStatus;
 import com.favccxx.amp.admin.constants.SysConstants;
 import com.favccxx.amp.admin.dto.req.ProductReq;
+import com.favccxx.amp.admin.service.ImageService;
 import com.favccxx.amp.admin.service.ProductService;
 import com.favccxx.amp.admin.service.ShopService;
 import com.favccxx.amp.admin.util.SortUtil;
 import com.favccxx.amp.db.dto.RestResult;
+import com.favccxx.amp.db.model.AmpImage;
 import com.favccxx.amp.db.model.AmpProduct;
 import com.favccxx.amp.db.model.AmpShop;
 import com.favccxx.amp.util.date.DateUtil;
@@ -49,6 +53,8 @@ public class ProductController {
 	ShopService shopService;
 	@Autowired
 	ProductService productService;
+	@Autowired
+	ImageService imageService;
 	
 	@GetMapping("/list") 
 	@ApiResponses(value = {
@@ -113,6 +119,8 @@ public class ProductController {
     @ApiOperation(httpMethod = "GET", value = "根据产品Id查询产品信息")
 	public RestResult detail(@PathVariable (value = "id") long id) {
 		AmpProduct product = productService.findOne(id);
+		List<AmpImage> images = imageService.findByProductId(id);
+		product.setSliders(images);
 		return RestResult.ok(product, "操作成功");
 	}
 	
@@ -262,6 +270,15 @@ public class ProductController {
 					product.setShopId(shop.getId());
 				}
 				
+				List<AmpImage> images = new ArrayList<AmpImage>();
+				for(String sliderUrl : productReq.getSliders()) {
+					AmpImage image = new AmpImage();
+					image.setProductId(product.getId());
+					image.setUrl(sliderUrl);
+					image.setType(SysConstants.IMAGE_SLIDER);
+					images.add(image);					
+				}
+				imageService.updateProductImages(product.getId(), images);
 				
 				product.setCreateTime(new Date());
 				product.setUpdateTime(new Date());

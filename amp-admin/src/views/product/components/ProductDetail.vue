@@ -21,7 +21,7 @@
 
               <el-row>
                 <el-form-item style="margin-bottom: 40px;" label-width="85px" label="所属分类">
-                  <el-cascader :options="categoryList" expand-trigger="hover" :props="props" v-model="selectedCategory" @change="handleCategoryChange"/>
+                  <el-cascader :disabled="isEdit" :options="categoryList" :props="props" v-model="selectedCategory" expand-trigger="hover" @change="handleCategoryChange"/>
                 </el-form-item>
               </el-row>
 
@@ -86,16 +86,29 @@
                   </el-upload>
                 </el-form-item>
               </el-row>
+
+              <el-form-item label="商品画册">
+                <el-upload
+                  :action="uploadImagePath"
+                  :limit="5"
+                  :headers="headers"
+                  :file-list="uploadedSliders"
+                  :before-upload="beforeUpload"
+                  :on-exceed="uploadOverrun"
+                  :on-success="handleGalleryUrl"
+                  :on-remove="handleRemove"
+                  multiple
+                  accept=".jpg,.jpeg,.png,.gif"
+                  list-type="picture-card">
+                  <i class="el-icon-plus"/>
+                </el-upload>
+              </el-form-item>
             </div>
           </el-col>
         </el-row>
 
         <div class="editor-container">
           <Tinymce ref="editor" :height="400" v-model="postForm.detail" />
-        </div>
-
-        <div style="margin-bottom: 20px;">
-          <Upload v-model="postForm.image_uri" :pro-id="id" />
         </div>
 
       </div>
@@ -105,10 +118,9 @@
 </template>
 
 <script>
-import Dropzone from '@/components/Dropzone'
+
 import user from '@/store/modules/user'
 import Tinymce from '@/components/Tinymce'
-import Upload from '@/components/Upload/productImage'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { validateURL } from '@/utils/validate'
@@ -116,12 +128,13 @@ import { dateFormat00, dateFormatEndYear } from '@/utils/dateutil'
 import { fetchProductDetail, fetchProductEmpty, updateProduct } from '@/api/product'
 import { uploadImagePath } from '@/api/image'
 import { getToken } from '@/utils/auth'
-import { listByLevel } from '@/api/category'
+import { listByLevel, findParent } from '@/api/category'
 import { userSearch } from '@/api/remoteSearch'
 import Warning from './Warning'
 import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown'
 
 const defaultForm = {
+  sliders: [],
   productImg: '',
   status: 'draft',
   shopCode: user.state.shopCode,
@@ -144,7 +157,7 @@ const defaultForm = {
 
 export default {
   name: 'ProductDetail',
-  components: { Tinymce, MDinput, Upload, Sticky, Warning, CommentDropdown, PlatformDropdown, SourceUrlDropdown, Dropzone },
+  components: { Tinymce, MDinput, Sticky, Warning, CommentDropdown, PlatformDropdown, SourceUrlDropdown },
   props: {
     isEdit: {
       type: Boolean,
@@ -180,6 +193,7 @@ export default {
     }
     return {
       uploadImagePath,
+      uploadedSliders: [],
       categoryId: undefined,
       id: undefined,
       postForm: Object.assign({}, defaultForm),
@@ -194,6 +208,7 @@ export default {
       },
       categoryList: [],
       selectedCategory: [],
+      sliders: [],
       props: {
         label: 'categoryName',
         value: 'id'
@@ -227,8 +242,36 @@ export default {
       _self.productId = this.postForm.id
     },
     uploadImageUrl: function(response) {
-      this.postForm.productImg = response.data + "?imageView2/1/w/146/h/146"
+      this.postForm.productImg = response.data + '?imageView2/1/w/146/h/146'
       console.log('uploadImageUrl', response, this.postForm.productImg)
+    },
+    uploadOverrun: function() {
+      this.$message({
+        type: 'error',
+        message: '上传文件个数超出限制!最多上传5张图片!'
+      })
+    },
+    handleGalleryUrl(response, file, fileList) {
+      console.log('upload-gallery succes', response)
+      this.postForm.sliders.push(response.data)
+    },
+    handleRemove: function(file, fileList) {
+      for (var i = 0; i < this.postForm.sliders.length; i++) {
+       // 这里存在两种情况
+       // 1. 如果所删除图片是刚刚上传的图片，那么图片地址是file.response.data.url
+       //    此时的file.url虽然存在，但是是本机地址，而不是远程地址。
+       // 2. 如果所删除图片是后台返回的已有图片，那么图片地址是file.url
+        var url
+        if (file.response === undefined) {
+          url = file.url
+        } else {
+          url = file.response.data.url
+        }
+
+        if (this.postForm.sliders[i] === url) {
+          this.postForm.sliders.splice(i, 1)
+        }
+       }
     },
     getCategoryList() {
       listByLevel().then(response => {
@@ -252,10 +295,32 @@ export default {
     fetchData(id) {
       fetchProductDetail(id).then(response => {
         this.postForm = response.data.data
-        // Just for test
-        // this.postForm.productName += `   Article Id:${this.postForm.id}`
-        // this.postForm.content_short += `   Article Id:${this.postForm.id}`
+        var images = response.data.data.sliders
+        for(var i=0; i<images.length; i++) {
+          this.uploadedSliders.push({
+            url: images[i].url
+          })
+        }
 
+        this.postForm.sliders = []
+        var categoryId = response.data.data.categoryId
+
+        this.fetchSelectedCategory(categoryId)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    fetchSelectedCategory(categoryId) {
+      var params = {
+        categoryId: categoryId
+      }
+      findParent(params).then(response => {
+        var parentId = response.data.data.id
+        var categories = new Array()
+        categories.push(parentId)
+        categories.push(categoryId)
+        this.selectedCategory = categories
+        console.log('categories', this.selectedCategory)
       }).catch(err => {
         console.log(err)
       })

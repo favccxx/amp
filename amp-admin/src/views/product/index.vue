@@ -35,7 +35,7 @@
       </el-table-column>
       <el-table-column :label="$t('product.productImage')" min-width="10%" align="center">
         <template slot-scope="scope">
-           <img :src="scope.row.productImg" width="40">
+          <img :src="scope.row.productImg" width="40">
         </template>
       </el-table-column>
       <el-table-column :label="$t('product.productName')" min-width="20%" align="center">
@@ -83,7 +83,7 @@
           <router-link v-if="scope.row.status!='400'" :to="'/product/edit/'+scope.row.id">
             <el-button type="primary" size="small" icon="el-icon-edit">{{ $t('table.edit') }}</el-button>
           </router-link>
-          
+
           <el-button v-if="scope.row.status=='300'" size="mini" type="success" @click="handleModifyStatus(scope.row,'published')">{{ $t('table.publish') }}
           </el-button>
           <el-button v-if="scope.row.status!='400'" size="mini" type="danger" @click="handleModifyStatus(scope.row,'deleted')">{{ $t('table.delete') }}

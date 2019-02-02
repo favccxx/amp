@@ -15,4 +15,18 @@ public interface ImageService extends BaseService<AmpImage> {
 	 */
 	List<AmpImage> listThumbnailsByProductId(long productId);
 	
+	/**
+	 * 更新产品的幻灯片图片
+	 * @param productId 产品Id
+	 * @param list 图片列表
+	 */
+	void updateProductImages(long productId, List<AmpImage> list);
+	
+	/**
+	 * 根据产品Id查询图片列表
+	 * @param productId
+	 * @return
+	 */
+	List<AmpImage> findByProductId(long productId);
+	
 }

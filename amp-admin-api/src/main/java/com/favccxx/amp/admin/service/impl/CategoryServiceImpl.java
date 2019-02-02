@@ -77,4 +77,13 @@ public class CategoryServiceImpl extends BaseServiceImpl<CategoryRepository, Amp
 		return list;
 	}
 
+	@Override
+	public AmpCategory findParent(long categoryId) {
+		AmpCategory category = repository.findById(categoryId).get();
+		if(category != null && category.getParentId() != 0) {
+			return repository.findById(category.getParentId()).get();
+		}
+		return null;
+	}
+
 }

@@ -101,6 +101,16 @@ public class CategoryController {
 		List<AmpCategory> list = categoryService.listParent();
 		return RestResult.ok(list);
 	}
+	
+	
+	@GetMapping("/findParent")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "操作成功", response = AmpCategory.class) })
+	@ApiOperation(httpMethod = "GET", value = "根据类别Id查找父类别信息")
+	public RestResult findParent(@RequestParam(value = "categoryId", required = false) String categoryId) {
+		AmpCategory category = categoryService.findParent(Long.valueOf(categoryId));
+		return RestResult.ok(category);
+	}
+	
 
 	@GetMapping("/listNomal")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "操作成功", response = AmpCategory.class) })
