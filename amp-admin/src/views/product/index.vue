@@ -33,6 +33,11 @@
           <span>{{ scope.row.productNo }}</span>
         </template>
       </el-table-column>
+      <el-table-column :label="$t('product.productImage')" min-width="10%" align="center">
+        <template slot-scope="scope">
+           <img :src="scope.row.productImg" width="40">
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('product.productName')" min-width="20%" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.productName }}</span>
@@ -75,7 +80,10 @@
       </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" min-width="10%" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.status!='400'" type="primary" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.edit') }}</el-button>
+          <router-link v-if="scope.row.status!='400'" :to="'/product/edit/'+scope.row.id">
+            <el-button type="primary" size="small" icon="el-icon-edit">{{ $t('table.edit') }}</el-button>
+          </router-link>
+          
           <el-button v-if="scope.row.status=='300'" size="mini" type="success" @click="handleModifyStatus(scope.row,'published')">{{ $t('table.publish') }}
           </el-button>
           <el-button v-if="scope.row.status!='400'" size="mini" type="danger" @click="handleModifyStatus(scope.row,'deleted')">{{ $t('table.delete') }}
@@ -102,6 +110,7 @@
 </template>
 
 <script>
+import user from '@/store/modules/user'
 import { fetchNormalCategoryList } from '@/api/category'
 import { fetchProductList, fetchProductDetail, createProduct, updateProduct } from '@/api/product'
 import waves from '@/directive/waves' // 水波纹指令
@@ -143,6 +152,7 @@ export default {
       total: null,
       listLoading: true,
       listQuery: {
+        shopCode: user.state.shopCode,
         categoryId: undefined,
         page: 1,
         limit: 20,

@@ -17,7 +17,7 @@ export function fetchProductEmpty() {
 
 export function fetchProductDetail(id) {
   return request({
-    url: '/product/detail',
+    url: '/product/detail/' + id,
     method: 'get',
     params: { id }
   })

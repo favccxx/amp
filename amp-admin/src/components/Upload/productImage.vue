@@ -9,12 +9,13 @@
       :on-success="handleImageSuccess"
       class="image-uploader"
       drag
-      action="http://172.17.3.111:8088/api/image/upload">
+      action="http://127.0.0.1:8088/api/admin/image/upload">
       <i class="el-icon-upload"/>
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
     </el-upload>
 
     <image-view v-for="item in items" :key="item.id" :image-item="item" />
+
   </div>
 </template>
 
@@ -109,7 +110,7 @@ export default {
       fd.append('productId', this.proId)
       fd.append('file', content.file)
 
-      axios.post('http://172.17.3.111:8088/api/image/upload', fd, {
+      axios.post('http://127.0.0.1:8088/api/admin/image/upload', fd, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Access-Control-Allow-Origin': '*',

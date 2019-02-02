@@ -15,3 +15,6 @@ export function uploadImage(query) {
     params: query
   })
 }
+
+const uploadImagePath = process.env.BASE_API + 'qiniu/upload'
+export { uploadImagePath }

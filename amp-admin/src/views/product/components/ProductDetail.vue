@@ -19,13 +19,17 @@
             <div class="postInfo-container">
               <input v-model="postForm.id" type="hidden">
 
-              <el-form-item style="margin-bottom: 40px;" label-width="85px" label="所属分类">
-                <el-cascader :options="categoryList" expand-trigger="hover" :props="props" v-model="selectedCategory" @change="handleCategoryChange"/>
-              </el-form-item>
+              <el-row>
+                <el-form-item style="margin-bottom: 40px;" label-width="85px" label="所属分类">
+                  <el-cascader :options="categoryList" expand-trigger="hover" :props="props" v-model="selectedCategory" @change="handleCategoryChange"/>
+                </el-form-item>
+              </el-row>
 
-              <el-form-item style="margin-bottom: 40px;" label-width="85px" label="产品名称:">
-                <el-input v-model="postForm.productName" placeholder="请输入产品名称" />
-              </el-form-item>
+              <el-row>
+                <el-form-item style="margin-bottom: 40px;" label-width="85px" label="产品名称:">
+                  <el-input v-model="postForm.productName" placeholder="请输入产品名称" />
+                </el-form-item>
+              </el-row>
 
               <el-row>
                 <el-col :span="8">
@@ -65,6 +69,23 @@
                   </el-form-item>
                 </el-col>
               </el-row>
+
+              <el-row>
+                <el-form-item label="商品图片">
+                  <el-upload
+                    :action="uploadImagePath"
+                    :show-file-list="false"
+                    :headers="headers"
+                    :before-upload="beforeUpload"
+                    :on-success="uploadImageUrl"
+                    class="avatar-uploader"
+                    list-type="picture-card"
+                    accept=".jpg,.jpeg,.png,.gif">
+                    <img v-if="postForm.productImg" :src="postForm.productImg" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"/>
+                  </el-upload>
+                </el-form-item>
+              </el-row>
             </div>
           </el-col>
         </el-row>
@@ -76,6 +97,7 @@
         <div style="margin-bottom: 20px;">
           <Upload v-model="postForm.image_uri" :pro-id="id" />
         </div>
+
       </div>
     </el-form>
 
@@ -83,19 +105,24 @@
 </template>
 
 <script>
+import Dropzone from '@/components/Dropzone'
 import user from '@/store/modules/user'
 import Tinymce from '@/components/Tinymce'
 import Upload from '@/components/Upload/productImage'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { validateURL } from '@/utils/validate'
+import { dateFormat00, dateFormatEndYear } from '@/utils/dateutil'
 import { fetchProductDetail, fetchProductEmpty, updateProduct } from '@/api/product'
+import { uploadImagePath } from '@/api/image'
+import { getToken } from '@/utils/auth'
 import { listByLevel } from '@/api/category'
 import { userSearch } from '@/api/remoteSearch'
 import Warning from './Warning'
 import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown'
 
 const defaultForm = {
+  productImg: '',
   status: 'draft',
   shopCode: user.state.shopCode,
   categoryId: undefined, // 产品类别
@@ -110,12 +137,14 @@ const defaultForm = {
   id: undefined,
   platforms: ['a-platform'],
   comment_disabled: false,
-  star: 3
+  star: 3,
+  onlineDate: dateFormat00(new Date()),
+  offlineDate: dateFormatEndYear(new Date())
 }
 
 export default {
   name: 'ProductDetail',
-  components: { Tinymce, MDinput, Upload, Sticky, Warning, CommentDropdown, PlatformDropdown, SourceUrlDropdown },
+  components: { Tinymce, MDinput, Upload, Sticky, Warning, CommentDropdown, PlatformDropdown, SourceUrlDropdown, Dropzone },
   props: {
     isEdit: {
       type: Boolean,
@@ -150,6 +179,7 @@ export default {
       }
     }
     return {
+      uploadImagePath,
       categoryId: undefined,
       id: undefined,
       postForm: Object.assign({}, defaultForm),
@@ -173,6 +203,11 @@ export default {
   computed: {
     contentShortLength() {
       return this.postForm.content_short.length
+    },
+    headers() {
+      return {
+        'X-Token': getToken()
+      }
     }
   },
   created() {
@@ -187,6 +222,14 @@ export default {
     }
   },
   methods: {
+    beforeUpload() {
+      const _self = this
+      _self.productId = this.postForm.id
+    },
+    uploadImageUrl: function(response) {
+      this.postForm.productImg = response.data + "?imageView2/1/w/146/h/146"
+      console.log('uploadImageUrl', response, this.postForm.productImg)
+    },
     getCategoryList() {
       listByLevel().then(response => {
         this.categoryList = response.data.data
@@ -208,10 +251,11 @@ export default {
     },
     fetchData(id) {
       fetchProductDetail(id).then(response => {
-        this.postForm = response.data
+        this.postForm = response.data.data
         // Just for test
-        this.postForm.productName += `   Article Id:${this.postForm.id}`
-        this.postForm.content_short += `   Article Id:${this.postForm.id}`
+        // this.postForm.productName += `   Article Id:${this.postForm.id}`
+        // this.postForm.content_short += `   Article Id:${this.postForm.id}`
+
       }).catch(err => {
         console.log(err)
       })

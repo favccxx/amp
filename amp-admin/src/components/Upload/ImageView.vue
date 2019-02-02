@@ -1,7 +1,7 @@
 <template>
   <div class="image-preview">
     <div v-show="imageViewItem.id>1" class="image-preview-wrapper">
-      <img :src="'http://172.17.3.111:8088/api/image/thumbnail/' + imageViewItem.id">
+      <img :src="'http://127.0.0.1:8088/api/admin/image/thumbnail/' + imageViewItem.id">
       <div class="image-preview-action">
         <i class="el-icon-delete" @click="rmImage"/>
       </div>
