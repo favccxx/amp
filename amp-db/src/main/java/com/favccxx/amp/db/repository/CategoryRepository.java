@@ -9,6 +9,8 @@ import com.favccxx.amp.db.model.AmpCategory;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<AmpCategory, Long> {
+	
+	
 
 	/**
 	 * 根据类别状态查询产品类别信息列表
@@ -26,4 +28,6 @@ public interface CategoryRepository extends JpaRepository<AmpCategory, Long> {
 	 * @return
 	 */
 	List<AmpCategory> findByParentIdAndStatus(long parentId, int status);
+	
+	
 }
