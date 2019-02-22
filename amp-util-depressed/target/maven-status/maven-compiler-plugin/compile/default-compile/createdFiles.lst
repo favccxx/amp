@@ -1,0 +1,4 @@
+com\favccxx\amp\util\log\LogUtil.class
+com\favccxx\amp\util\date\DateUtil.class
+com\favccxx\amp\util\jwt\JWTUtil.class
+com\favccxx\amp\util\thumb\ThumbnailUtil.class
